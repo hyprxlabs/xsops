@@ -56,6 +56,13 @@ var ensureCmd = &cobra.Command{
 				}
 				os.Exit(1)
 			}
+			trimit, _ := cmd.Flags().GetBool("trim")
+			if trimit {
+				secretRecord.Secret = strings.TrimSpace(secretRecord.Secret)
+				print(secretRecord.Secret)
+				os.Exit(0)
+			}
+
 			println(secretRecord.Secret)
 			os.Exit(0)
 		}
@@ -137,6 +144,12 @@ var ensureCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		trimit, _ := cmd.Flags().GetBool("trim")
+		if trimit {
+			print(strings.TrimSpace(secretValue))
+			os.Exit(0)
+		}
+
 		println(secretValue)
 		os.Exit(res.Code)
 	},
@@ -151,5 +164,6 @@ func init() {
 	ensureCmd.Flags().BoolP("no-digits", "D", false, "Do not include numbers in the secret")
 	ensureCmd.Flags().BoolP("no-symbols", "S", false, "Do not include symbols in the secret")
 	ensureCmd.Flags().String("symbols", "_-@#^~`|=+{}[]", "Custom symbols to include in the secret")
+	ensureCmd.Flags().Bool("trim", false, "Trim whitespace from the secret value and not print as new line")
 	ensureCmd.Flags().StringP("chars", "c", "", "Custom characters to include in the secret")
 }

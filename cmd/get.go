@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/fatih/color"
 	"github.com/hyprxlabs/go/exec"
@@ -56,6 +57,14 @@ var getCmd = &cobra.Command{
 			}
 			os.Exit(1)
 		}
+
+		trimit, _ := cmd.Flags().GetBool("trim")
+		if trimit {
+			secretRecord.Secret = strings.TrimSpace(secretRecord.Secret)
+			print(secretRecord.Secret)
+			os.Exit(0)
+		}
+
 		println(secretRecord.Secret)
 		os.Exit(0)
 	},
@@ -63,5 +72,6 @@ var getCmd = &cobra.Command{
 
 func init() {
 	getCmd.Flags().BoolP("debug", "d", false, "Enable debug mode")
+	getCmd.Flags().Bool("trim", false, "Trim whitespace from the secret value and not print as new line")
 	rootCmd.AddCommand(getCmd)
 }

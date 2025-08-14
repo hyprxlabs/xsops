@@ -1,0 +1,67 @@
+package cmd
+
+import (
+	"encoding/json"
+	"os"
+	"path/filepath"
+
+	"github.com/fatih/color"
+	"github.com/hyprxlabs/go/exec"
+	"github.com/spf13/cobra"
+)
+
+var getCmd = &cobra.Command{
+	Use:   "get [URI] [KEY]",
+	Short: "Get a secret from the secrets database",
+	Long:  `Get a secret from the secrets database using its URI and key.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) < 2 {
+			color.Red("[ERROR]: You must provide a URI and a key to get a secret.")
+			color.Yellow("Usage: xsops get [URI] [KEY]")
+			os.Exit(1)
+		}
+
+		debug, _ := cmd.Flags().GetBool("debug")
+
+		uriString := args[0]
+		key := args[1]
+
+		filePath, err := getFilePath(uriString)
+		if err != nil {
+			if debug {
+				color.Red("[ERROR]: Error getting file path: %v", err)
+			}
+			os.Exit(1)
+		}
+
+		dir := filepath.Dir(filePath)
+
+		cmd0 := exec.New("sops", "decrypt", "--extract", "[\""+key+"\"]", filePath)
+		cmd0.Dir = dir
+
+		res, err := cmd0.Output()
+		if err != nil {
+			if debug {
+				color.Red("[ERROR]: Error executing sops command: %v", err)
+			}
+			os.Exit(1)
+		}
+
+		jsonRecord := string(res.Text())
+		secretRecord := &SecretRecord{}
+		err = json.Unmarshal([]byte(jsonRecord), secretRecord)
+		if err != nil {
+			if debug {
+				color.Red("[ERROR]: Error unmarshalling JSON: %v", err)
+			}
+			os.Exit(1)
+		}
+		println(secretRecord.Secret)
+		os.Exit(0)
+	},
+}
+
+func init() {
+	getCmd.Flags().BoolP("debug", "d", false, "Enable debug mode")
+	rootCmd.AddCommand(getCmd)
+}

@@ -1,0 +1,8 @@
+[tools]
+go = '1.24.5'
+
+[tasks.build]
+run = """
+go build -o bin/xsops ./main.go
+cp ./bin/xsops $HOME/.local/bin/xsops
+"""

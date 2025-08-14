@@ -28,6 +28,8 @@ xsops [command] [flags]
 - `xsops init [directory]`: Ensure an age file exists, creates a .sops.yaml
    file and creates xsops.secrets.json file in the specified directory if it does
    not exist. If no directory is specified, it defaults user's data home directory.
+   The data home directory is typically `~/.local/share/xsops` on Linux,
+   `~/Library/Application Support/xsops/data` on macOS, and `%APPDATA%\xsops\data` on Windows.
 - `xsops ensure <url> <key>`: Ensure a secret exists by key, if it does not exist,
    it will be created using a cryptographically secure random value that defaults
    to NIST standards.
@@ -41,3 +43,8 @@ IF the `uri` is set to `default` or `'', it will use the home data directory.
 
 If the `uri` is set to `.`, it will use the current working directory and assume
 the file is named `xsops.secrets.json`.
+
+## Other References
+
+- [sops](https://github.com/getsops/sops)
+- [age](https://github.com/FiloSottile/age)

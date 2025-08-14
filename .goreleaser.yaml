@@ -51,13 +51,11 @@ nfpms:
 chocolateys:
   - name: xsops
     description: |
-      A cross-platform cli-app for setting environment variables and executing commands with
-      the newly set environment variables.
+      A cross-platform cli using sops and json as a local secret store.
 
-      The `hx-env` command allows you to set environment variables from the command line,
-      load them from `.env` files, or both, and execute a command with those environment variables.
+      The `xsops` command allows you to manage secrets stored in JSON files using the sops tool.
 
-      The environment variables support environment variable expansion and command substitution.
+      The secrets can be easily retrieved, set, and removed from the command line.
     package_source_url: "https://github.com/hyprxlabs/xsops"
     title: "xsops"
     project_url: "https://github.com/hyprxlabs/xsops"
@@ -65,8 +63,8 @@ chocolateys:
     require_license_acceptance: false
     icon_url: "https://raw.githubusercontent.com/hyprxlabs/dotnet/refs/heads/main/eng/assets/hyprx_logo_256.png"
     authors: "Hyprxdev <180069990+hyprxdev@users.noreply.github.com>"
-    tags: "env command-line run command dotenv"
-    summary: "xsops is a crossplatform cli app for setting environment variables and executing commands with those variables set."
+    tags: "xsops sops"
+    summary: "xsops is a crossplatform cli app for sops and json as a local secret store."
     release_notes: "https://github.com/foo/bar/releases/tag/v{{ .Version }}"
     skip_publish: true
 

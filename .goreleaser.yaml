@@ -37,8 +37,8 @@ archives:
 nfpms:
   - id: xsops
     description:  |
-      xsops is a command-line tool for managing environment variables and executing commands with those variables set."
-    homepage: "https://github.com/hyprxlabs/hx-env"
+      xsops is a cross platform tool enabling the use of sops and json as a local secret store."
+    homepage: "https://github.com/hyprxlabs/xsops"
     file_name_template: "{{ .PackageName }}-{{ .Os }}-{{ .Arch}}-{{ .Version }}"
     maintainer: "Hyprxdev <180069990+hyprxdev@users.noreply.github.com>"
     license: "MIT"
@@ -51,7 +51,7 @@ nfpms:
 chocolateys:
   - name: xsops
     description: |
-      A cross-platform cli using sops and json as a local secret store.
+      A cross-platform tool enabling sops and json as a local secret store.
 
       The `xsops` command allows you to manage secrets stored in JSON files using the sops tool.
 

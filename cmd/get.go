@@ -14,7 +14,13 @@ import (
 var getCmd = &cobra.Command{
 	Use:   "get [URI] [KEY]",
 	Short: "Get a secret from the secrets database",
-	Long:  `Get a secret from the secrets database using its URI and key.`,
+	Long: `Get a secret from the secrets database using its URI and key.
+	
+If needed, use the --trim flag to trim whitespace from the secret value and not print as a new line.
+
+Output for anything other than the secret is disabled by default, use the 
+--debug flag to enable it to triage issues.
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 2 {
 			color.Red("[ERROR]: You must provide a URI and a key to get a secret.")

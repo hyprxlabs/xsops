@@ -16,7 +16,21 @@ import (
 var ensureCmd = &cobra.Command{
 	Use:   "ensure [URI] [KEY]",
 	Short: "Ensures that the xsops secret database is initialized",
-	Long:  `Ensures that the xsops secret database is initialized in the specified directory.`,
+	Long: `Ensures that the xsops secret database is initialized in the specified directory.
+	
+If no secret exists, it generates a new secret with flags/options provided. By default
+a new 32 character secret is generated with uppercase, lowercase, digits and symbols
+included  which meets NIST SP 800-63B requirements.
+
+The secret is stored in the xsops.secrets.json file in the specified directory and the
+new secret is returned.
+	
+If needed, use the --trim flag to trim whitespace from the secret value and not print as
+a new line.
+
+Output for anything other than the secret is disabled by default, use the --debug flag
+to enable it to triage issues.
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 2 {
 			color.Red("[ERROR]: You must provide a URI and a key to get a secret.")

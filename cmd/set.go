@@ -16,7 +16,17 @@ import (
 var setCmd = &cobra.Command{
 	Use:   "set [URI] [KEY]",
 	Short: "Set a secret in the secrets database",
-	Long:  `Set a secret in the secrets database using its URI and key.`,
+	Long: `Set a secret in the secrets database using its URI and key.
+	
+Use various flags to specify the secret value, expiration time, tags, and more.
+
+To set the secret using standard input, use the --stdin flag.
+To set the secret from a file, use the --file flag.
+To set the secret from an environment variable, use the --env flag.
+To directly set the secret value, use the --value flag. This should only be
+used if you are wrapping the command in a script or similar and not
+from the shell directly.
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 2 {
 			color.Red("[ERROR]: You must provide a URI and a key to set a secret.")

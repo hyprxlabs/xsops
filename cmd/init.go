@@ -14,6 +14,14 @@ import (
 var initCmd = &cobra.Command{
 	Use:   "init [DIRECTORY]",
 	Short: "Initializes xsops secret database in the specified directory",
+	Long: `Initializes xsops secret database in the specified directory.
+	
+	If no directory is specified, it defaults to the user's home data directory.
+	If no age key for sops is found, it generates a new one in the user's 
+	home config directory.
+
+	It creates a default sops configuration file and an empty secrets file 
+	the directory.  The default name for a secrets file is xsops.secrets.json.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		os.Setenv("XSOPS_CONFIG_HOME", "")
 		homeConfig, err := os.UserConfigDir()

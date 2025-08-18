@@ -7,7 +7,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/hyprxlabs/xops/internal/config"
+	"github.com/hyprxlabs/xsops/internal/config"
 )
 
 type SecretRecord struct {

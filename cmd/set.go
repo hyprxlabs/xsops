@@ -175,7 +175,6 @@ from the shell directly.
 		}
 
 		cmd1 := exec.New("sops", "set", filePath, "[\""+key+"\"]", string(jsonBytes))
-		println(cmd1.Path + " " + strings.Join(cmd1.Args, " "))
 		cmd1.Dir = dir
 
 		o, err := cmd1.Run()

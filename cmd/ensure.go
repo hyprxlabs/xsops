@@ -54,7 +54,6 @@ to enable it to triage issues.
 		dir := filepath.Dir(filePath)
 
 		cmd0 := exec.New("sops", "decrypt", "--extract", "[\""+key+"\"]", filePath)
-		println(cmd0.Path + " " + strings.Join(cmd0.Args, " "))
 		cmd0.Dir = dir
 
 		res, _ := cmd0.Output()
@@ -147,7 +146,6 @@ to enable it to triage issues.
 		}
 
 		cmd0 = exec.New("sops", "set", filePath, "[\""+key+"\"]", string(jsonBytes))
-		println(cmd0.Path + " " + strings.Join(cmd0.Args, " "))
 		cmd0.Dir = dir
 		res, err = cmd0.Output()
 		if err != nil {

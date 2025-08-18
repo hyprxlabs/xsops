@@ -33,7 +33,7 @@ func GetRegistry() (*viper.Viper, error) {
 }
 
 func GetHomeConfig() (string, error) {
-	homeConfig := os.Getenv("XOPS_CONFIG_HOME")
+	homeConfig := os.Getenv("XSOPS_CONFIG_HOME")
 	if homeConfig != "" {
 		return homeConfig, nil
 	}

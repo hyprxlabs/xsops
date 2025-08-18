@@ -1,4 +1,4 @@
-module github.com/hyprxlabs/xops
+module github.com/hyprxlabs/xsops
 
 go 1.24.5
 

@@ -27,7 +27,6 @@ var editCmd = &cobra.Command{
 
 		uriString := args[0]
 		filePath, err := getFilePath(uriString)
-		println(filePath)
 		if err != nil {
 			color.Red("[ERROR]: Error getting file path: %v", err)
 			os.Exit(1)

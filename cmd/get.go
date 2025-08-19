@@ -67,11 +67,11 @@ Output for anything other than the secret is disabled by default, use the
 		trimit, _ := cmd.Flags().GetBool("trim")
 		if trimit {
 			secretRecord.Secret = strings.TrimSpace(secretRecord.Secret)
-			print(secretRecord.Secret)
+			os.Stdout.WriteString(secretRecord.Secret)
 			os.Exit(0)
 		}
 
-		println(secretRecord.Secret)
+		os.Stdout.WriteString(secretRecord.Secret + "\n")
 		os.Exit(0)
 	},
 }

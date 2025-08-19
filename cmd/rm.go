@@ -82,7 +82,7 @@ var rmCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		println("Secret removed successfully.")
+		os.Stdout.WriteString("Secret removed successfully." + "\n")
 		os.Exit(0)
 	},
 }

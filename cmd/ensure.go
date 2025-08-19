@@ -59,7 +59,6 @@ to enable it to triage issues.
 		res, _ := cmd0.Output()
 
 		if len(res.Stdout) > 0 && res.Code == 0 {
-			println("Secret already exists, skipping initialization.")
 			jsonRecord := string(res.Text())
 			secretRecord := &SecretRecord{}
 			err = json.Unmarshal([]byte(jsonRecord), secretRecord)
@@ -72,11 +71,12 @@ to enable it to triage issues.
 			trimit, _ := cmd.Flags().GetBool("trim")
 			if trimit {
 				secretRecord.Secret = strings.TrimSpace(secretRecord.Secret)
-				print(secretRecord.Secret)
+				os.Stdout.WriteString(secretRecord.Secret)
 				os.Exit(0)
 			}
 
-			println(secretRecord.Secret)
+			os.Stdout.WriteString(secretRecord.Secret)
+			os.Stdout.Write([]byte("\n"))
 			os.Exit(0)
 		}
 
@@ -117,7 +117,6 @@ to enable it to triage issues.
 
 		masker := builder.Build()
 		masker.Size = size
-		println(size)
 		secretValue, err := secrets.Generate(size, opts...)
 		if secretValue == "" {
 			color.Red("[ERROR]: Failed to generate secret value.")
@@ -158,11 +157,11 @@ to enable it to triage issues.
 
 		trimit, _ := cmd.Flags().GetBool("trim")
 		if trimit {
-			print(strings.TrimSpace(secretValue))
+			os.Stdout.WriteString(strings.TrimSpace(secretValue))
 			os.Exit(0)
 		}
 
-		println(secretValue)
+		os.Stdout.WriteString(secretValue + "\n")
 		os.Exit(res.Code)
 	},
 }

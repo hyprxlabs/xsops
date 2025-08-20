@@ -12,20 +12,21 @@ import (
 )
 
 var rmCmd = &cobra.Command{
-	Use:   "rm [URI] [KEY]",
+	Use:   "rm [KEY]",
 	Short: "Remove a secret from the secrets database",
 	Long:  `Remove a secret from the secrets database using its URI and key.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) < 2 {
+		if len(args) < 1 {
 			color.Red("[ERROR]: You must provide a URI and a key to remove a secret.")
 			color.Yellow("Usage: xsops rm [URI] [KEY]")
 			os.Exit(1)
 		}
 
 		debug, _ := cmd.Flags().GetBool("debug")
+		vault, _ := cmd.Flags().GetString("vault")
 
-		uriString := args[0]
-		key := args[1]
+		uriString := vault
+		key := args[0]
 
 		filePath, err := getFilePath(uriString)
 		if err != nil {

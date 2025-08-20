@@ -12,25 +12,19 @@ import (
 )
 
 var lsCmd = &cobra.Command{
-	Use:   "ls [URI]",
+	Use:   "ls",
 	Short: "List all secrets in the secrets database",
 	Long: `List all secrets in the secrets database using its URI.
 	
 Use the --match flag to filter secrets by glob pattern.`,
-	Example: `xsops ls default
-	xsops ls default --match "*prod*"
-	xsops ls ./xsops.secrets.json
-	xsops ls sops:///path/to/secrets.json`,
+	Example: `xsops -v default ls
+	xsops default ls --match "*prod*"
+	xsops -v ./xsops.secrets.json ls 
+	xsops -v sops:///path/to/secrets.json ls `,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) < 1 {
-			color.Red("[ERROR]: You must provide a URI to list secrets.")
-			color.Yellow("Usage: xsops ls [URI]")
-			os.Exit(1)
-		}
-
 		debug, _ := cmd.Flags().GetBool("debug")
-
-		uriString := args[0]
+		vault, _ := cmd.Flags().GetString("vault")
+		uriString := vault
 
 		filePath, err := getFilePath(uriString)
 		if err != nil {

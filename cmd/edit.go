@@ -10,25 +10,26 @@ import (
 )
 
 var editCmd = &cobra.Command{
-	Use:   "edit [URI]",
+	Use:   "edit",
 	Short: "Edit a secret in the secrets database",
 	Long:  `Edit a secret in the secrets database using its URI.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		if len(args) < 1 {
-			color.Red("[ERROR]: You must provide a URI to edit a secret.")
-			color.Yellow("Usage: xsops edit [URI]")
-			os.Exit(1)
-		}
+		vault, _ := cmd.Flags().GetString("vault")
 		useCode, _ := cmd.Flags().GetBool("use-code")
 		if useCode {
 			os.Setenv("SOPS_EDITOR", "code --wait --new-window --disable-workspace-trust --disable-extensions --disable-telemetry")
 		}
 
-		uriString := args[0]
+		uriString := vault
 		filePath, err := getFilePath(uriString)
 		if err != nil {
 			color.Red("[ERROR]: Error getting file path: %v", err)
+			os.Exit(1)
+		}
+
+		if _, err := os.Stat(filePath); os.IsNotExist(err) {
+			color.Red("[ERROR]: The specified vault file does not exist: %s", filePath)
 			os.Exit(1)
 		}
 

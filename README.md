@@ -21,11 +21,16 @@ xsops [command] [flags]
 
 ## Commands
 
-- `xsops ls <uri>`: List secrets in the current directory.
-- `xsops get <uri> <key>`: Get a secret by key.
-- `xsops set <uri> <key>`: Set a secret by key.
-- `xsops rm <uri> <key>`: Remove a secret by key.
-- `xsops init [directory]`: Ensure an age file exists, creates a .sops.yaml
+- `xsops ls`: List secrets in the current directory.
+- `xsops get <KEY>`: Get a secret by key.
+- `xsops set <KEY>`: Set a secret by key. There are multiple ways to set a secret
+  value.
+  - `--stdin`: Read the secret value from standard input.
+  - `--value`: Set the secret value directly in the command line.
+  - `--file`: Read the secret value from a file.
+  - `--env`: Read the secret value from an environment variable.
+- `xsops rm  <KEY>`: Remove a secret by key.
+- `xsops init`: Ensure an age file exists, creates a .sops.yaml
    file and creates xsops.secrets.json file in the specified directory if it does
    not exist. If no directory is specified, it defaults user's data home directory.
    The data home directory is typically `~/.local/share/xsops` on Linux,
@@ -36,13 +41,19 @@ xsops [command] [flags]
 - `xsops edit <url>`: Allows editing of the secrets file in a text editor and then saves
     the changes back to the file when the file is closed.
 
-The `uri` can be a relative file path, absolute file path, or a URL using the file://
-or sops:// scheme. The `key` is the name of the secret you want to manage.
+## Global Flags
 
-IF the `uri` is set to `default` or `'', it will use the home data directory.
+- `debug` or `-d`: Enable debug output.
+- `vault` or `-v`: Specify a custom vault URI or relative path to use for storing secrets.
+  - ./xsops.secrets.json
+  - . - current working directory, assumes the file is named `xsops.secrets.json`.
+  - `default` - special value that uses the home data directory for the vault.
+  - `./child/xsops.secrets.json` - relative path to the secrets file.
+  - `sops://full/path/to/secrets/file.json` - absolute path to the secrets file.
+  - `file://full/path/to/secrets/file.json` - absolute path to the secrets file.
 
-If the `uri` is set to `.`, it will use the current working directory and assume
-the file is named `xsops.secrets.json`.
+`$XSOPS_VAULT` environment variable can also be used to specify the vault URI. The `--vault`
+flag will override the environment variable if both are set.
 
 ## Other References
 

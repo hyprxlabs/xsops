@@ -14,7 +14,7 @@ import (
 )
 
 var setCmd = &cobra.Command{
-	Use:   "set [URI] [KEY]",
+	Use:   "set [KEY]",
 	Short: "Set a secret in the secrets database",
 	Long: `Set a secret in the secrets database using its URI and key.
 	
@@ -28,16 +28,17 @@ used if you are wrapping the command in a script or similar and not
 from the shell directly.
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) < 2 {
+		if len(args) < 1 {
 			color.Red("[ERROR]: You must provide a URI and a key to set a secret.")
 			color.Yellow("Usage: xsops set [URI] [KEY]")
 			os.Exit(1)
 		}
 
 		debug, _ := cmd.Flags().GetBool("debug")
+		vault, _ := cmd.Flags().GetString("vault")
 
-		uriString := args[0]
-		key := args[1]
+		uriString := vault
+		key := args[0]
 
 		filePath, err := getFilePath(uriString)
 		if err != nil {
@@ -192,6 +193,6 @@ func init() {
 	setCmd.Flags().StringToStringP("tags", "t", nil, "Set tags for the secret (key=value pairs)")
 	setCmd.Flags().BoolP("stdin", "S", false, "Read secret from stdin instead of command line argument")
 	setCmd.Flags().StringP("file", "f", "", "Path to the file containing the secret (if not using stdin)")
-	setCmd.Flags().StringP("value", "v", "", "Directly set the secret value (if not using stdin or file)")
+	setCmd.Flags().StringP("value", "V", "", "Directly set the secret value (if not using stdin or file)")
 	rootCmd.AddCommand(setCmd)
 }

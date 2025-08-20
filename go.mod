@@ -5,7 +5,8 @@ go 1.24.5
 require (
 	github.com/fatih/color v1.18.0
 	github.com/gobwas/glob v0.2.3
-	github.com/hyprxlabs/go/exec v0.1.0
+	github.com/hyprxlabs/go/env v0.1.3
+	github.com/hyprxlabs/go/exec v0.1.2
 	github.com/hyprxlabs/go/secrets v0.1.0
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.20.1
@@ -14,8 +15,7 @@ require (
 require (
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
-	github.com/hyprxlabs/go/cmdargs v0.1.0 // indirect
-	github.com/hyprxlabs/go/env v0.1.1 // indirect
+	github.com/hyprxlabs/go/cmdargs v0.1.1 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect

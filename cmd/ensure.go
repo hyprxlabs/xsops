@@ -14,7 +14,7 @@ import (
 )
 
 var ensureCmd = &cobra.Command{
-	Use:   "ensure [URI] [KEY]",
+	Use:   "ensure [KEY]",
 	Short: "Ensures that the xsops secret database is initialized",
 	Long: `Ensures that the xsops secret database is initialized in the specified directory.
 	
@@ -32,16 +32,17 @@ Output for anything other than the secret is disabled by default, use the --debu
 to enable it to triage issues.
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) < 2 {
-			color.Red("[ERROR]: You must provide a URI and a key to get a secret.")
-			color.Yellow("Usage: xsops get [URI] [KEY]")
+		if len(args) < 1 {
+			color.Red("[ERROR]: You must provide the KEY to get a secret.")
+			color.Yellow("Usage: xsops -v <vault> get [KEY]")
 			os.Exit(1)
 		}
 
+		vault, _ := cmd.Flags().GetString("vault")
 		debug, _ := cmd.Flags().GetBool("debug")
 
-		uriString := args[0]
-		key := args[1]
+		uriString := vault
+		key := args[0]
 
 		filePath, err := getFilePath(uriString)
 		if err != nil {
@@ -168,7 +169,6 @@ to enable it to triage issues.
 
 func init() {
 	rootCmd.AddCommand(ensureCmd)
-	ensureCmd.Flags().BoolP("debug", "d", false, "Enable debug mode")
 	ensureCmd.Flags().Int16P("size", "s", 0, "Size of the secret to ensure")
 	ensureCmd.Flags().BoolP("no-upper", "U", false, "Do not include uppercase letters in the secret")
 	ensureCmd.Flags().BoolP("no-lower", "L", false, "Do not include lowercase letters in the secret")

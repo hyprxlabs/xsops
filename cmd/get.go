@@ -12,7 +12,7 @@ import (
 )
 
 var getCmd = &cobra.Command{
-	Use:   "get [URI] [KEY]",
+	Use:   "get [KEY]",
 	Short: "Get a secret from the secrets database",
 	Long: `Get a secret from the secrets database using its URI and key.
 	
@@ -22,16 +22,17 @@ Output for anything other than the secret is disabled by default, use the
 --debug flag to enable it to triage issues.
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) < 2 {
-			color.Red("[ERROR]: You must provide a URI and a key to get a secret.")
-			color.Yellow("Usage: xsops get [URI] [KEY]")
+
+		if len(args) < 1 {
+			color.Red("[ERROR]: You must provide a key to get a secret.")
+			color.Yellow("Usage: xsops get [KEY]")
 			os.Exit(1)
 		}
 
 		debug, _ := cmd.Flags().GetBool("debug")
-
-		uriString := args[0]
-		key := args[1]
+		vault, _ := cmd.Flags().GetString("vault")
+		uriString := vault
+		key := args[0]
 
 		filePath, err := getFilePath(uriString)
 		if err != nil {
@@ -42,7 +43,6 @@ Output for anything other than the secret is disabled by default, use the
 		}
 
 		dir := filepath.Dir(filePath)
-
 		cmd0 := exec.New("sops", "decrypt", "--extract", "[\""+key+"\"]", filePath)
 		cmd0.Dir = dir
 
@@ -77,7 +77,6 @@ Output for anything other than the secret is disabled by default, use the
 }
 
 func init() {
-	getCmd.Flags().BoolP("debug", "d", false, "Enable debug mode")
 	getCmd.Flags().Bool("trim", false, "Trim whitespace from the secret value and not print as new line")
 	rootCmd.AddCommand(getCmd)
 }

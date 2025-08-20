@@ -12,7 +12,7 @@ import (
 )
 
 var initCmd = &cobra.Command{
-	Use:   "init [DIRECTORY]",
+	Use:   "init",
 	Short: "Initializes xsops secret database in the specified directory",
 	Long: `Initializes xsops secret database in the specified directory.
 	
@@ -77,18 +77,25 @@ creation_rules:
 			}
 		}
 
-		dir := ""
-		if len(args) > 0 {
-			dir = args[0]
-			if !filepath.IsAbs(dir) {
-				d, err := filepath.Abs(dir)
-				if err != nil {
-					color.Red("[ERROR]: Error getting absolute path: %v", err)
-					os.Exit(1)
-				}
-				dir = d
-			}
+		dir, err := cmd.Flags().GetString("vault")
+		if err != nil {
+			color.Red("[ERROR]: Error getting vault flag: %v", err)
+			os.Exit(1)
 		}
+
+		fileName := "xsops.secrets.json"
+
+		if len(dir) > 0 && filepath.Ext(dir) == ".json" {
+			fileName = filepath.Base(dir)
+			dir = filepath.Dir(dir)
+			d, err := filepath.Abs(dir)
+			if err != nil {
+				color.Red("[ERROR]: Error getting absolute path: %v", err)
+				os.Exit(1)
+			}
+			dir = d
+		}
+
 		if dir == "" {
 			homeData, err := getUserHomeData()
 			if err != nil {
@@ -98,7 +105,7 @@ creation_rules:
 			dir = homeData
 		}
 
-		secretsFile := filepath.Join(dir, "xsops.secrets.json")
+		secretsFile := filepath.Join(dir, fileName)
 		sopsFile := filepath.Join(dir, ".sops.yaml")
 
 		if _, err := os.Stat(sopsFile); os.IsNotExist(err) {

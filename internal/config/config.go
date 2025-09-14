@@ -45,7 +45,8 @@ func GetHomeConfig() (string, error) {
 		}
 	}
 
-	if runtime.GOOS == "windows" {
+	switch runtime.GOOS {
+	case "windows":
 		homeConfig = os.Getenv("APPDATA")
 		if homeConfig != "" {
 			return filepath.Join(homeConfig, "xsops"), nil
@@ -56,13 +57,13 @@ func GetHomeConfig() (string, error) {
 			return filepath.Join(home, "AppData", "Roaming", "xsops"), nil
 		}
 		return "", os.ErrNotExist
-	} else if runtime.GOOS == "darwin" {
+	case "darwin":
 		homeConfig = os.Getenv("HOME")
 		if homeConfig != "" {
 			return filepath.Join(homeConfig, "Library", "Application Support", "xsops"), nil
 		}
 		return "", os.ErrNotExist
-	} else {
+	default:
 		homeConfig = os.Getenv("HOME")
 		if homeConfig != "" {
 			return filepath.Join(homeConfig, ".config", "xsops"), nil

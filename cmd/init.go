@@ -77,35 +77,20 @@ creation_rules:
 			}
 		}
 
-		dir, err := cmd.Flags().GetString("vault")
+		vault, _ := cmd.Flags().GetString("vault")
+		debug, _ := cmd.Flags().GetBool("debug")
+
+		uriString := vault
+
+		fileName, err := getFilePath(uriString)
 		if err != nil {
-			color.Red("[ERROR]: Error getting vault flag: %v", err)
+			if debug {
+				color.Red("[ERROR]: Error getting file path: %v", err)
+			}
 			os.Exit(1)
 		}
 
-		fileName := "xsops.secrets.json"
-
-		if len(dir) > 0 && filepath.Ext(dir) == ".json" {
-			fileName = filepath.Base(dir)
-			dir = filepath.Dir(dir)
-			d, err := filepath.Abs(dir)
-			if err != nil {
-				color.Red("[ERROR]: Error getting absolute path: %v", err)
-				os.Exit(1)
-			}
-			dir = d
-		}
-
-		if dir == "" {
-			homeData, err := getUserHomeData()
-			if err != nil {
-				color.Red("[ERROR]: Error getting user home data: %v", err)
-				os.Exit(1)
-			}
-			dir = homeData
-		}
-
-		secretsFile := filepath.Join(dir, fileName)
+		dir := filepath.Dir(fileName)
 		sopsFile := filepath.Join(dir, ".sops.yaml")
 
 		if _, err := os.Stat(sopsFile); os.IsNotExist(err) {
@@ -128,18 +113,18 @@ creation_rules:
 			}
 		}
 
-		if _, err := os.Stat(secretsFile); os.IsNotExist(err) {
+		if _, err := os.Stat(fileName); os.IsNotExist(err) {
 			if err := os.MkdirAll(dir, 0755); err != nil {
 				color.Red("[ERROR]: Error creating directory: %v", err)
 				os.Exit(1)
 			}
 
-			if err := os.WriteFile(secretsFile, []byte("{}"), 0644); err != nil {
+			if err := os.WriteFile(fileName, []byte("{}"), 0644); err != nil {
 				color.Red("[ERROR]: Error writing secrets file: %v", err)
 				os.Exit(1)
 			}
 
-			o, err := exec.New("sops", "encrypt", "-i", secretsFile).WithCwd(dir).Run()
+			o, err := exec.New("sops", "encrypt", "-i", fileName).WithCwd(dir).Run()
 			if err != nil {
 				color.Red("[ERROR]: Error encrypting secrets file: %v", err)
 				os.Exit(1)
